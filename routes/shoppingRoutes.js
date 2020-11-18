@@ -12,12 +12,7 @@ router.get("/", function (req, res) {
 router.post("/", (req, res, next) => {
 	const newItem = req.body;
 	items.push(newItem);
-	res.json({
-		added: {
-			name: newItem.name,
-			price: newItem.price,
-		},
-	});
+	res.json({ added: req.body });
 });
 
 // this route should display a single item’s name and price.
@@ -25,7 +20,14 @@ router.get("/:name", (req, res, next) => {
 	const foundItem = items.find((item) => item.name === req.params.name);
 	res.json(foundItem);
 });
-// router.patch("/:name", (req, res, next) => {});
+
+// this route should modify a single item’s name and/or price.
+router.patch("/:name", (req, res, next) => {
+	const foundItem = items.find((item) => item.name === req.params.name);
+	foundItem.name = req.body.name;
+	foundItem.price = req.body.price;
+	res.json({ updated: foundItem });
+});
 // router.delete("/:name", (req, res, next) => {});
 
 module.exports = router;
