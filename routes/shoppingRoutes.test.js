@@ -10,6 +10,8 @@ const item3 = { name: "Ketchup", price: 4.99 };
 const item4 = { price: 4.49 };
 const item5 = { name: "Relish" };
 
+const updatedItem2 = { name: "EggWhites", price: 6.49 };
+
 beforeEach(() => {
 	items.push(item1);
 	items.push(item2);
@@ -52,16 +54,35 @@ describe("GET /items/:name", () => {
 		expect(res.statusCode).toBe(200);
 		expect(res.body).toEqual(item1);
 	});
-	test("Request missing 'price'", async () => {
+	test("Item name not found", async () => {
 		const res = await request(app).get("/items/Muffins");
 		expect(res.statusCode).toBe(404);
 	});
 });
-// describe('PATCH /items/:name', () => {
-//     test(, async () => {
 
-//     })
-// })
+describe("PATCH /items/:name", () => {
+	test("Successfully update item", async () => {
+		const res = await request(app).patch("/items/Eggs").send(updatedItem2);
+		expect(res.statusCode).toBe(200);
+		expect(res.body).toEqual({ updated: updatedItem2 });
+	});
+	test("Item name not found", async () => {
+		const res = await request(app).patch("/items/Steak").send(updatedItem2);
+		expect(res.statusCode).toBe(404);
+	});
+	test("Request missing 'name'", async () => {
+		const res = await request(app).patch("/items/Bread").send(item4);
+		expect(res.statusCode).toBe(400);
+	});
+	test("Request missing 'price'", async () => {
+		const res = await request(app).patch("/items/Bread").send(item5);
+		expect(res.statusCode).toBe(400);
+	});
+	test("Request missing 'name' and 'price'", async () => {
+		const res = await request(app).patch("/items/Bread").send({});
+		expect(res.statusCode).toBe(400);
+	});
+});
 // describe('DELETE /items/:name', () => {
 //     test(, async () => {
 
