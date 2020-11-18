@@ -20,7 +20,11 @@ router.post("/", (req, res, next) => {
 	});
 });
 
-// router.get("/:name", (req, res, next) => {});
+// this route should display a single item’s name and price.
+router.get("/:name", (req, res, next) => {
+	const foundItem = items.find((item) => item.name === req.params.name);
+	res.json(foundItem);
+});
 // router.patch("/:name", (req, res, next) => {});
 // router.delete("/:name", (req, res, next) => {});
 
