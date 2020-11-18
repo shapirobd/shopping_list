@@ -46,11 +46,17 @@ describe("POST /items", () => {
 		expect(res.statusCode).toBe(400);
 	});
 });
-// describe('GET /items/:name', () => {
-//     test(, async () => {
-
-//     })
-// })
+describe("GET /items/:name", () => {
+	test("Successfully retrieve item", async () => {
+		const res = await request(app).get("/items/Bread");
+		expect(res.statusCode).toBe(200);
+		expect(res.body).toEqual(item1);
+	});
+	test("Request missing 'price'", async () => {
+		const res = await request(app).get("/items/Muffins");
+		expect(res.statusCode).toBe(404);
+	});
+});
 // describe('PATCH /items/:name', () => {
 //     test(, async () => {
 
