@@ -83,8 +83,19 @@ describe("PATCH /items/:name", () => {
 		expect(res.statusCode).toBe(400);
 	});
 });
-// describe('DELETE /items/:name', () => {
-//     test(, async () => {
 
-//     })
-// })
+describe("DELETE /items/:name", () => {
+	test("Successfully delete item", async () => {
+		expect(items.length).toBe(2);
+		const res = await request(app).delete("/items/Bread");
+		expect(res.statusCode).toBe(200);
+		expect(res.body).toEqual({ message: "Deleted" });
+		expect(items.length).toBe(1);
+	});
+	test("Item name not found", async () => {
+		expect(items.length).toBe(2);
+		const res = await request(app).delete("/items/Steak");
+		expect(res.statusCode).toBe(404);
+		expect(items.length).toBe(2);
+	});
+});
