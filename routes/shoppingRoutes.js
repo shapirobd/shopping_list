@@ -12,7 +12,7 @@ router.get("/", function (req, res) {
 router.post("/", (req, res, next) => {
 	try {
 		if (!req.body.name || !req.body.price) {
-			throw new ShopError("Name & Price are required");
+			throw new ShopError("Name & Price are required", 400);
 		}
 		const newItem = req.body;
 		items.push(newItem);
@@ -24,8 +24,15 @@ router.post("/", (req, res, next) => {
 
 // this route should display a single item’s name and price.
 router.get("/:name", (req, res, next) => {
-	const foundItem = items.find((item) => item.name === req.params.name);
-	res.json(foundItem);
+	try {
+		const foundItem = items.find((item) => item.name === req.params.name);
+		if (!foundItem) {
+			throw new ShopError("Item not found", 404);
+		}
+		res.json(foundItem);
+	} catch (e) {
+		next(e);
+	}
 });
 
 // this route should modify a single item’s name and/or price.
