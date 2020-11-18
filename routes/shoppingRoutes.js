@@ -10,9 +10,16 @@ router.get("/", function (req, res) {
 
 // this route should accept JSON data and add it to the shopping list.
 router.post("/", (req, res, next) => {
-	const newItem = req.body;
-	items.push(newItem);
-	res.json({ added: req.body });
+	try {
+		if (!req.body.name || !req.body.price) {
+			throw new ShopError("Name & Price are required");
+		}
+		const newItem = req.body;
+		items.push(newItem);
+		res.json({ added: req.body });
+	} catch (e) {
+		next(e);
+	}
 });
 
 // this route should display a single item’s name and price.
