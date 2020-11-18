@@ -28,6 +28,12 @@ router.patch("/:name", (req, res, next) => {
 	foundItem.price = req.body.price;
 	res.json({ updated: foundItem });
 });
-// router.delete("/:name", (req, res, next) => {});
+
+// this route should allow you to delete a specific item from the array.
+router.delete("/:name", (req, res, next) => {
+	const foundItem = items.find((item) => item.name === req.params.name);
+	items.splice(foundItem, 1);
+	res.json({ message: "Deleted" });
+});
 
 module.exports = router;
