@@ -16,7 +16,7 @@ router.post("/", (req, res, next) => {
 		}
 		const newItem = req.body;
 		items.push(newItem);
-		res.json({ added: req.body });
+		res.status(201).json({ added: req.body });
 	} catch (e) {
 		next(e);
 	}
