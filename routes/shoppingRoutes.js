@@ -37,10 +37,20 @@ router.get("/:name", (req, res, next) => {
 
 // this route should modify a single item’s name and/or price.
 router.patch("/:name", (req, res, next) => {
-	const foundItem = items.find((item) => item.name === req.params.name);
-	foundItem.name = req.body.name;
-	foundItem.price = req.body.price;
-	res.json({ updated: foundItem });
+	try {
+		if (!req.body.name || !req.body.price) {
+			throw new ShopError("Name & Price are required", 400);
+		}
+		const foundItem = items.find((item) => item.name === req.params.name);
+		if (!foundItem) {
+			throw new ShopError("Item not found", 404);
+		}
+		foundItem.name = req.body.name;
+		foundItem.price = req.body.price;
+		res.json({ updated: foundItem });
+	} catch (e) {
+		next(e);
+	}
 });
 
 // this route should allow you to delete a specific item from the array.
